@@ -3,7 +3,7 @@
 > **A robust backend solution designed to digitize, audit, and optimize the domestic supply chain using a Modular Monolith architecture.**
 
 ![Java](https://img.shields.io/badge/Java-21-orange?style=flat&logo=openjdk)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2-green?style=flat&logo=springboot)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.2-green?style=flat&logo=springboot)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue?style=flat&logo=postgresql)
 ![Architecture](https://img.shields.io/badge/Architecture-Modular_Monolith-purple?style=flat)
 ![Status](https://img.shields.io/badge/Status-Active_Development-yellow)
