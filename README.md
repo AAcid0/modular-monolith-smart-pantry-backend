@@ -45,7 +45,7 @@ To handle the domain complexity without the operational overhead of premature di
 | Layer | Technology | Justification |
 | :--- | :--- | :--- |
 | **Language** | Java 21 (LTS) | Leveraging Records, Pattern Matching, and Virtual Threads. |
-| **Framework** | Spring Boot 3 | Industry standard for building robust REST APIs. |
+| **Framework** | Spring Boot 4.0.2 | Industry standard for building robust REST APIs. |
 | **Database** | PostgreSQL 16 + PostGIS | Robust relational management + native geospatial capabilities. |
 | **ORM** | Spring Data JPA (Hibernate) | Data access abstraction. |
 | **Infrastructure** | Docker & Docker Compose | Reproducible and isolated development environment. |

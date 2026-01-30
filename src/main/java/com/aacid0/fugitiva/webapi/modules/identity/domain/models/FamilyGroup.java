@@ -1,11 +1,15 @@
 package com.aacid0.fugitiva.webapi.modules.identity.domain.models;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.aacid0.fugitiva.webapi.common.persistence.models.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -28,6 +32,6 @@ public class FamilyGroup extends BaseEntity {
     @Column(name = "invitation_code", nullable = false)
     private String invitationCode;
 
-    @OneToMany(mappedBy = "familyGroup")
-    private List<User> users;
+    @ManyToMany(mappedBy = "familyGroups", fetch = FetchType.LAZY)
+    private Set<User> users = new HashSet<>();
 }

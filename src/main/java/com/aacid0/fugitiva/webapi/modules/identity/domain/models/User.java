@@ -1,11 +1,16 @@
 package com.aacid0.fugitiva.webapi.modules.identity.domain.models;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.aacid0.fugitiva.webapi.common.persistence.models.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -15,7 +20,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "user")
+@Table(name = "\"user\"")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,10 +36,7 @@ public class User extends BaseEntity {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    @Column(name = "role", nullable = false)
-    private String role;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "family_group_id", nullable = false)
-    private FamilyGroup familyGroup;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_family_groups", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "family_group_id"))
+    private Set<FamilyGroup> familyGroups = new HashSet<>();
 }
