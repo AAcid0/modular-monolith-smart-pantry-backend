@@ -32,11 +32,22 @@ To handle the domain complexity without the operational overhead of premature di
 * **Domain-Driven Design (DDD):** DDD tactics are applied to protect business integrity, isolating the Domain from Infrastructure and UI (Clean Architecture principles).
 * **Ready to Scale:** The module boundaries are designed to be easily extracted into independent microservices if the workload or team size requires it in the future, without rewriting business logic.
 
-### Technical Standards
+### Technical Standards & Architecture
 
-* **Infrastructure as Code:** Environment-agnostic deployment using Docker Compose.
-* **Security & Auditing:** Strict use of `UUID` (v4) for entity identifiers to mitigate enumeration risks (IDOR) and ensure consistency in distributed systems.
-* **Robust Persistence:** Strict schema validation (`ddl-auto=validate`) ensures that the Java code respects the referential integrity of the PostgreSQL database.
+This project adheres to strict software engineering standards to ensure scalability, security, and maintainability.
+
+#### **1. Enterprise-Grade Security**
+* **Stateless Authentication Architecture:** Implemented via **Spring Security 6** and **JWT**, eliminating server-side sessions for true RESTful compliance.
+* **Dual-Token Strategy:** Robust mechanism featuring short-lived **Access Tokens** (15 min) and long-lived, rotatable **Refresh Tokens** (7 days) to balance security with user experience.
+* **Cryptographic Protection:** Passwords are salted and hashed using **BCrypt** (work factor 10) prior to persistence.
+* **Anti-IDOR Design:** Strict usage of **UUID v4** for all entity identifiers, preventing resource enumeration attacks and ensuring collision-free IDs in distributed systems.
+
+#### **2. Infrastructure & Deployment**
+* **Containerization:** Environment-agnostic deployment using **Docker Compose**, ensuring parity between development and production environments (`Write Once, Run Anywhere`).
+* **Configuration Management:** Strict separation of config and code via environment variables (`.env`), following **12-Factor App** principles.
+
+#### **3. Data Persistence & Integrity**
+* **Schema Validation:** Enforced `ddl-auto=validate` policy to ensure the Java entity model strictly respects the **PostgreSQL** referential integrity, preventing "drift" between code and database.
 
 ---
 
@@ -51,34 +62,7 @@ To handle the domain complexity without the operational overhead of premature di
 | **Infrastructure** | Docker & Docker Compose | Reproducible and isolated development environment. |
 | **Security** | Environment Variables (.env) | Credential protection following the 12-Factor App methodology. |
 
-
-## 🚀 Installation & Execution
-
-### Prerequisites
-* Docker & Docker Compose
-* Java 21 JDK
-* Maven
-
-### Steps
-
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/tu-usuario/modular-monolith-smart-pantry-backend.git](https://github.com/tu-usuario/modular-monolith-smart-pantry-backend.git)
-    cd modular-monolith-smart-pantry-backend
-    ```
-
-2.  **Start Infrastructure (Database):**
-    ```bash
-    docker-compose up -d
-    ```
-    *This will start PostgreSQL with the PostGIS extension enabled.*
-
-3.  **Run the Application:**
-    ```bash
-    ./mvnw spring-boot:run
-    ```
 ---
-
 
 ## 🗺️ Roadmap
 
