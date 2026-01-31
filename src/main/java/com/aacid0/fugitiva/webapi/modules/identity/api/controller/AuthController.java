@@ -3,6 +3,7 @@ package com.aacid0.fugitiva.webapi.modules.identity.api.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,5 +23,15 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<CreateUserResponse> registerUser(@RequestBody CreateUserRequest request) {
         return ResponseEntity.ok(authService.registerUser(request));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<CreateUserResponse> loginUser(@RequestBody CreateUserRequest request) {
+        return ResponseEntity.ok(authService.loginUser(request));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<CreateUserResponse> refreshToken(@RequestHeader("Authorization") String authHeader) {
+        return ResponseEntity.ok(authService.refreshToken(authHeader));
     }
 }

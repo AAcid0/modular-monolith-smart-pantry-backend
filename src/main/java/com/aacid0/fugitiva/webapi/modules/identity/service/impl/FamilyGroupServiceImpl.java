@@ -1,5 +1,7 @@
 package com.aacid0.fugitiva.webapi.modules.identity.service.impl;
 
+import com.aacid0.fugitiva.webapi.common.exception.AlreadyInFamilyGroupException;
+import com.aacid0.fugitiva.webapi.common.exception.InvitationCodeNotFoundException;
 import com.aacid0.fugitiva.webapi.common.exception.UserIdentificatorNotFoundException;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateFamilyGroupRequest;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateFamilyGroupResponse;
@@ -96,6 +98,24 @@ public class FamilyGroupServiceImpl implements IFamilyGroupService {
         }
 
         return code.toString();
+    }
+
+    @Override
+    @Transactional
+    public void joinFamilyGroup(UUID userId, String invitationCode) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserIdentificatorNotFoundException("Usuario no encontrado"));
+
+        FamilyGroup familyGroup = familyGroupRepository.findByInvitationCode(invitationCode)
+                .orElseThrow(() -> new InvitationCodeNotFoundException("Código de invitación inválido"));
+
+        boolean alreadyMember = user.getFamilyGroups().contains(familyGroup);
+        if (alreadyMember) {
+            throw new AlreadyInFamilyGroupException("Ya eres miembro de este grupo familiar");
+        }
+
+        user.getFamilyGroups().add(familyGroup);
+        userRepository.save(user);
     }
 
 }

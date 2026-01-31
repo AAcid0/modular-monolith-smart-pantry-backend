@@ -10,4 +10,6 @@ public interface IFamilyGroupService {
     CreateFamilyGroupResponse createFamilyGroup(CreateFamilyGroupRequest request);
 
     GetFamilyGroupsByUserIdResponse getAllFamilyGroupsByUserId(UUID user_id);
+
+    void joinFamilyGroup(UUID userId, String invitationCode);
 }

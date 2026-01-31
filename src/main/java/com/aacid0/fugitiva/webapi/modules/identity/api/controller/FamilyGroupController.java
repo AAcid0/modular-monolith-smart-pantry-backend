@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateFamilyGroupRequest;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateFamilyGroupResponse;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.GetFamilyGroupsByUserIdResponse;
+import com.aacid0.fugitiva.webapi.modules.identity.api.dto.JoinFamilyGroupRequest;
 import com.aacid0.fugitiva.webapi.modules.identity.service.IFamilyGroupService;
 
 @RestController
@@ -33,5 +34,11 @@ public class FamilyGroupController {
     @GetMapping("/user/{user_id}/get")
     public ResponseEntity<GetFamilyGroupsByUserIdResponse> getAllFamilyGroupsByUserId(@PathVariable UUID user_id) {
         return ResponseEntity.ok(familyGroupService.getAllFamilyGroupsByUserId(user_id));
+    }
+
+    @PostMapping("/join")
+    public ResponseEntity<Void> joinFamilyGroup(@RequestBody JoinFamilyGroupRequest request) {
+        familyGroupService.joinFamilyGroup(request.user_id(), request.invitationCode());
+        return ResponseEntity.ok().build();
     }
 }
