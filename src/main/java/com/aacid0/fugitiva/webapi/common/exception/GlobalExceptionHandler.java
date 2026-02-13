@@ -16,4 +16,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleEmailUnavailableException(EmailUnavailableException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(UserIdentificatorNotFoundException.class)
+    public ResponseEntity<String> handleUserIdentificatorNotFoundException(UserIdentificatorNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UnauthorizedTokenException.class)
+    public ResponseEntity<String> handleUnauthorizedTokenException(UnauthorizedTokenException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
 }

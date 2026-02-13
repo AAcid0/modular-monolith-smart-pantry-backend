@@ -11,8 +11,11 @@ import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateUserRequest;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateUserResponse;
 import com.aacid0.fugitiva.webapi.modules.identity.service.IAuthService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/api/v1/auth")
+@Slf4j
 public class AuthController {
     private final IAuthService authService;
 
@@ -22,6 +25,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<CreateUserResponse> registerUser(@RequestBody CreateUserRequest request) {
+        log.info("DTO Register recibido: {}", request);
         return ResponseEntity.ok(authService.registerUser(request));
     }
 

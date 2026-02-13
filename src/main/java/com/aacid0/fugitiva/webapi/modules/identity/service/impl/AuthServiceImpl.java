@@ -44,6 +44,8 @@ public class AuthServiceImpl implements IAuthService {
         }
 
         User newUser = User.builder()
+                .name(null)
+                .imageUrl(null)
                 .email(request.email())
                 .passwordHash(passwordEncoder.encode(request.password_hash()))
                 .build();
@@ -53,7 +55,7 @@ public class AuthServiceImpl implements IAuthService {
         var jwtToken = jwtService.generateToken(newUser);
         var refreshToken = jwtService.generateRefreshToken(newUser);
 
-        return new CreateUserResponse(newUser.getEmail(), jwtToken, refreshToken);
+        return new CreateUserResponse(newUser.getId(), jwtToken, refreshToken);
     }
 
     @Override
@@ -62,15 +64,15 @@ public class AuthServiceImpl implements IAuthService {
             authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password_hash()));
         } catch (Exception e) {
-            throw new UserIdentificatorNotFoundException("Usuario no encontrado");
+            throw new UserIdentificatorNotFoundException("Email o contraseña incorrectos");
         }
 
         var user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new UserIdentificatorNotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> new UserIdentificatorNotFoundException("Email no encontrado"));
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
 
-        return new CreateUserResponse(user.getEmail(), jwtToken, refreshToken);
+        return new CreateUserResponse(user.getId(), jwtToken, refreshToken);
     }
 
     @Override
@@ -86,12 +88,12 @@ public class AuthServiceImpl implements IAuthService {
                 .orElseThrow(() -> new UserIdentificatorNotFoundException("Usuario no encontrado"));
 
         if (!jwtService.validateToken(refreshToken, user)) {
-            throw new UnauthorizedTokenException("Token inválido");
+            throw new UnauthorizedTokenException("Credenciales de token inválidas");
         }
 
         final String jwtToken = jwtService.generateToken(user);
 
-        return new CreateUserResponse(user.getEmail(), jwtToken, refreshToken);
+        return new CreateUserResponse(user.getId(), jwtToken, refreshToken);
     }
 
 }

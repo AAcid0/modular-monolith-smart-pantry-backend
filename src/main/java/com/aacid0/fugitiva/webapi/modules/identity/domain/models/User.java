@@ -42,6 +42,9 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_family_groups", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "family_group_id"))
     private Set<FamilyGroup> familyGroups = new HashSet<>();
