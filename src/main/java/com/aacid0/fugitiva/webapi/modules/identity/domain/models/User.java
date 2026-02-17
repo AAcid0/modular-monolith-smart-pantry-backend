@@ -46,8 +46,8 @@ public class User extends BaseEntity implements UserDetails {
     private String imageUrl;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_family_groups", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "family_group_id"))
-    private Set<FamilyGroup> familyGroups = new HashSet<>();
+    @JoinTable(name = "user_groups", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private Set<Group> groups = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

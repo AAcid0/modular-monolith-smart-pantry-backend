@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.aacid0.fugitiva.webapi.common.exception.EmailUnavailableException;
 import com.aacid0.fugitiva.webapi.common.exception.UnauthorizedTokenException;
 import com.aacid0.fugitiva.webapi.common.exception.UserIdentificatorNotFoundException;
+import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateGroupRequest;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateUserRequest;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateUserResponse;
 import com.aacid0.fugitiva.webapi.modules.identity.domain.models.User;

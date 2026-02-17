@@ -1,23 +1,25 @@
 package com.aacid0.fugitiva.webapi.modules.identity.service.impl;
 
-import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.aacid0.fugitiva.webapi.common.exception.UserIdentificatorNotFoundException;
+import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateGroupRequest;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.UpdateUserRequest;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.UpdateUserResponse;
 import com.aacid0.fugitiva.webapi.modules.identity.domain.models.User;
 import com.aacid0.fugitiva.webapi.modules.identity.repository.IUserRepository;
+import com.aacid0.fugitiva.webapi.modules.identity.service.IGroupService;
 import com.aacid0.fugitiva.webapi.modules.identity.service.IUserService;
 
 @Service
 public class UserServiceImpl implements IUserService {
     private final IUserRepository userRepository;
+    private final IGroupService groupService;
 
-    public UserServiceImpl(IUserRepository userRepository) {
+    public UserServiceImpl(IUserRepository userRepository, IGroupService groupService) {
         this.userRepository = userRepository;
+        this.groupService = groupService;
     }
 
     @Override
@@ -35,6 +37,12 @@ public class UserServiceImpl implements IUserService {
                     return userRepository.save(existingUser);
                 })
                 .orElseThrow(() -> new UserIdentificatorNotFoundException("Usuario no encontrado"));
+
+        String firstName = updatedUser.getName().trim().split(" ")[0];
+        groupService.createGroup(CreateGroupRequest.builder()
+                .user_id(updatedUser.getId())
+                .name("Espacio de " + firstName)
+                .build());
 
         return new UpdateUserResponse(updatedUser.getId().toString());
     }

@@ -19,19 +19,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "family_group")
+@Table(name = "\"group\"")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FamilyGroup extends BaseEntity {
+public class Group extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "invitation_code", nullable = false)
+    @Column(name = "invitation_code", nullable = true)
     private String invitationCode;
 
-    @ManyToMany(mappedBy = "familyGroups", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "groups", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();
 }

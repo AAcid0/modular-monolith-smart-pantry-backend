@@ -1,18 +1,18 @@
 package com.aacid0.fugitiva.webapi.modules.identity.service.impl;
 
-import com.aacid0.fugitiva.webapi.common.exception.AlreadyInFamilyGroupException;
+import com.aacid0.fugitiva.webapi.common.exception.AlreadyInGroupException;
 import com.aacid0.fugitiva.webapi.common.exception.InvitationCodeNotFoundException;
 import com.aacid0.fugitiva.webapi.common.exception.UserIdentificatorNotFoundException;
-import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateFamilyGroupRequest;
-import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateFamilyGroupResponse;
-import com.aacid0.fugitiva.webapi.modules.identity.api.dto.GetAllFamilyGroupsByUserIdResponseBody;
-import com.aacid0.fugitiva.webapi.modules.identity.api.dto.GetFamilyGroupsByUserIdResponse;
+import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateGroupRequest;
+import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateGroupResponse;
+import com.aacid0.fugitiva.webapi.modules.identity.api.dto.GetAllGroupsByUserIdResponseBody;
+import com.aacid0.fugitiva.webapi.modules.identity.api.dto.GetGroupsByUserIdResponse;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.UserSummaryResponse;
-import com.aacid0.fugitiva.webapi.modules.identity.domain.models.FamilyGroup;
+import com.aacid0.fugitiva.webapi.modules.identity.domain.models.Group;
 import com.aacid0.fugitiva.webapi.modules.identity.domain.models.User;
-import com.aacid0.fugitiva.webapi.modules.identity.repository.IFamilyGroupRepository;
+import com.aacid0.fugitiva.webapi.modules.identity.repository.IGroupRepository;
 import com.aacid0.fugitiva.webapi.modules.identity.repository.IUserRepository;
-import com.aacid0.fugitiva.webapi.modules.identity.service.IFamilyGroupService;
+import com.aacid0.fugitiva.webapi.modules.identity.service.IGroupService;
 
 import jakarta.transaction.Transactional;
 
@@ -23,19 +23,19 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FamilyGroupServiceImpl implements IFamilyGroupService {
+public class GroupServiceImpl implements IGroupService {
 
-    private final IFamilyGroupRepository familyGroupRepository;
+    private final IGroupRepository groupRepository;
     private final IUserRepository userRepository;
 
-    public FamilyGroupServiceImpl(IFamilyGroupRepository familyGroupRepository, IUserRepository userRepository) {
-        this.familyGroupRepository = familyGroupRepository;
+    public GroupServiceImpl(IGroupRepository groupRepository, IUserRepository userRepository) {
+        this.groupRepository = groupRepository;
         this.userRepository = userRepository;
     }
 
     @Override
     @Transactional
-    public CreateFamilyGroupResponse createFamilyGroup(CreateFamilyGroupRequest request) {
+    public CreateGroupResponse createGroup(CreateGroupRequest request) {
         Optional<User> user = userRepository.findById(request.user_id());
 
         if (user.isEmpty()) {
@@ -44,48 +44,48 @@ public class FamilyGroupServiceImpl implements IFamilyGroupService {
 
         String invitationCode = generateInvitationCode();
 
-        FamilyGroup familyGroup = FamilyGroup.builder()
+        Group group = Group.builder()
                 .name(request.name())
                 .invitationCode(invitationCode)
                 .build();
 
-        familyGroup = familyGroupRepository.save(familyGroup);
+        group = groupRepository.save(group);
 
-        user.get().getFamilyGroups().add(familyGroup);
+        user.get().getGroups().add(group);
         userRepository.save(user.get());
 
-        return new CreateFamilyGroupResponse(familyGroup.getName(), familyGroup.getInvitationCode());
+        return new CreateGroupResponse(group.getName(), group.getInvitationCode());
     }
 
     @Override
-    public GetFamilyGroupsByUserIdResponse getAllFamilyGroupsByUserId(UUID user_id) {
+    public GetGroupsByUserIdResponse getAllGroupsByUserId(UUID user_id) {
         Optional<User> user = userRepository.findById(user_id);
 
         if (user.isEmpty()) {
             throw new UserIdentificatorNotFoundException("Usuario no encontrado");
         }
 
-        List<FamilyGroup> familyGroups = familyGroupRepository.findByUsers_id(user_id);
+        List<Group> groups = groupRepository.findByUsers_id(user_id);
 
-        List<GetAllFamilyGroupsByUserIdResponseBody> groupsDto = familyGroups.stream()
-                .map(familyGroup -> {
+        List<GetAllGroupsByUserIdResponseBody> groupsDto = groups.stream()
+                .map(group -> {
 
-                    List<UserSummaryResponse> membersDto = familyGroup.getUsers().stream()
+                    List<UserSummaryResponse> membersDto = group.getUsers().stream()
                             .map(member -> new UserSummaryResponse(
                                     member.getId(),
                                     member.getName(),
                                     member.getEmail()))
                             .toList();
 
-                    return new GetAllFamilyGroupsByUserIdResponseBody(
-                            familyGroup.getId(),
-                            familyGroup.getName(),
-                            familyGroup.getInvitationCode(),
+                    return new GetAllGroupsByUserIdResponseBody(
+                            group.getId(),
+                            group.getName(),
+                            group.getInvitationCode(),
                             membersDto);
                 })
                 .toList();
 
-        return new GetFamilyGroupsByUserIdResponse(groupsDto);
+        return new GetGroupsByUserIdResponse(groupsDto);
     }
 
     private String generateInvitationCode() {
@@ -102,19 +102,19 @@ public class FamilyGroupServiceImpl implements IFamilyGroupService {
 
     @Override
     @Transactional
-    public void joinFamilyGroup(UUID userId, String invitationCode) {
+    public void joinGroup(UUID userId, String invitationCode) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserIdentificatorNotFoundException("Usuario no encontrado"));
 
-        FamilyGroup familyGroup = familyGroupRepository.findByInvitationCode(invitationCode)
+        Group group = groupRepository.findByInvitationCode(invitationCode)
                 .orElseThrow(() -> new InvitationCodeNotFoundException("Código de invitación inválido"));
 
-        boolean alreadyMember = user.getFamilyGroups().contains(familyGroup);
+        boolean alreadyMember = user.getGroups().contains(group);
         if (alreadyMember) {
-            throw new AlreadyInFamilyGroupException("Ya eres miembro de este grupo familiar");
+            throw new AlreadyInGroupException("Ya eres miembro de este grupo familiar");
         }
 
-        user.getFamilyGroups().add(familyGroup);
+        user.getGroups().add(group);
         userRepository.save(user);
     }
 

@@ -31,11 +31,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<CreateUserResponse> loginUser(@RequestBody CreateUserRequest request) {
+        log.info("DTO Login recibido: {}", request);
         return ResponseEntity.ok(authService.loginUser(request));
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<CreateUserResponse> refreshToken(@RequestHeader("Authorization") String authHeader) {
+        log.info("Header Refresh recibido: {}", authHeader);
         return ResponseEntity.ok(authService.refreshToken(authHeader));
     }
 }

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 
 import com.aacid0.fugitiva.webapi.common.persistence.models.BaseEntity;
-import com.aacid0.fugitiva.webapi.modules.identity.domain.models.FamilyGroup;
+import com.aacid0.fugitiva.webapi.modules.identity.domain.models.Group;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,8 +46,8 @@ public class ShoppingList extends BaseEntity {
     private Date updatedDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "family_group_id", nullable = false)
-    private FamilyGroup familyGroup;
+    @JoinColumn(name = "group_id", nullable = false)
+    private Group group;
 
     @OneToOne(mappedBy = "shoppingList", fetch = FetchType.LAZY)
     private ReceiptAudit receiptAudit;

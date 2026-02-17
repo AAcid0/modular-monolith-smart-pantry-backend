@@ -4,7 +4,7 @@ import java.sql.Date;
 
 import com.aacid0.fugitiva.webapi.common.persistence.models.BaseEntity;
 import com.aacid0.fugitiva.webapi.modules.catalog.domain.models.Product;
-import com.aacid0.fugitiva.webapi.modules.identity.domain.models.FamilyGroup;
+import com.aacid0.fugitiva.webapi.modules.identity.domain.models.Group;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,8 +46,8 @@ public class InventoryItem extends BaseEntity {
     private InventoryItemStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "family_group_id", nullable = false)
-    private FamilyGroup familyGroup;
+    @JoinColumn(name = "group_id", nullable = false)
+    private Group group;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
