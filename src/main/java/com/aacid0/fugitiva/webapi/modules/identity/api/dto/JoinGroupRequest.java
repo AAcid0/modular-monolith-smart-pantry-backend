@@ -4,6 +4,6 @@ import java.util.UUID;
 
 public record JoinGroupRequest(
                 UUID user_id,
-                String invitationCode) {
+                String invitation_code) {
 
 }

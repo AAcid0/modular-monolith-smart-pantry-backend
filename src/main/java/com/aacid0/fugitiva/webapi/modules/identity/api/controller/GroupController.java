@@ -32,7 +32,7 @@ public class GroupController {
     @PostMapping("/create")
     public ResponseEntity<CreateGroupResponse> createGroup(@RequestBody CreateGroupRequest request) {
         log.info("DTO Create Group recibido: {}", request);
-        return ResponseEntity.ok(groupService.createGroup(request));
+        return ResponseEntity.ok(groupService.createGroup(request, true));
     }
 
     @GetMapping("/user/{user_id}/get")
@@ -44,7 +44,7 @@ public class GroupController {
     @PostMapping("/join")
     public ResponseEntity<Void> joinGroup(@RequestBody JoinGroupRequest request) {
         log.info("DTO Join Group recibido: {}", request);
-        groupService.joinGroup(request.user_id(), request.invitationCode());
+        groupService.joinGroup(request.user_id(), request.invitation_code());
         return ResponseEntity.ok().build();
     }
 }

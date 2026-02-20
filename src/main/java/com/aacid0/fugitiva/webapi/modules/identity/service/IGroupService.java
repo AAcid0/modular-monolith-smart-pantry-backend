@@ -7,9 +7,9 @@ import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateGroupResponse;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.GetGroupsByUserIdResponse;
 
 public interface IGroupService {
-    CreateGroupResponse createGroup(CreateGroupRequest request);
+    CreateGroupResponse createGroup(CreateGroupRequest request, boolean isPublic);
 
-    GetGroupsByUserIdResponse getAllGroupsByUserId(UUID user_id);
+    GetGroupsByUserIdResponse getAllGroupsByUserId(UUID userId);
 
     void joinGroup(UUID userId, String invitationCode);
 }

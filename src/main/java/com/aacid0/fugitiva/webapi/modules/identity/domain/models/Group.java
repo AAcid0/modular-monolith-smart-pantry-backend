@@ -1,5 +1,6 @@
 package com.aacid0.fugitiva.webapi.modules.identity.domain.models;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,6 +32,13 @@ public class Group extends BaseEntity {
 
     @Column(name = "invitation_code", nullable = true)
     private String invitationCode;
+
+    @Column(name = "is_public", nullable = false)
+    @Builder.Default
+    private boolean isPublic = true;
+
+    @Column(name = "budget", nullable = true)
+    private BigDecimal budget;
 
     @ManyToMany(mappedBy = "groups", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();

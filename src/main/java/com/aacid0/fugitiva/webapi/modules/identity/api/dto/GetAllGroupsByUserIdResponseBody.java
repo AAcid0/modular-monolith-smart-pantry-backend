@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 public record GetAllGroupsByUserIdResponseBody(
-        UUID id,
-        String name,
-        String invitationCode,
-        List<UserSummaryResponse> members) {
+                UUID id,
+                String name,
+                String invitation_code,
+                List<UserSummaryResponse> members) {
 }

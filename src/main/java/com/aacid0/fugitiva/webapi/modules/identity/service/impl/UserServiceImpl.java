@@ -42,7 +42,7 @@ public class UserServiceImpl implements IUserService {
         groupService.createGroup(CreateGroupRequest.builder()
                 .user_id(updatedUser.getId())
                 .name("Espacio de " + firstName)
-                .build());
+                .build(), false);
 
         return new UpdateUserResponse(updatedUser.getId().toString());
     }

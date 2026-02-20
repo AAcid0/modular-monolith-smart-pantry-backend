@@ -35,19 +35,28 @@ public class GroupServiceImpl implements IGroupService {
 
     @Override
     @Transactional
-    public CreateGroupResponse createGroup(CreateGroupRequest request) {
+    public CreateGroupResponse createGroup(CreateGroupRequest request, boolean isPublic) {
         Optional<User> user = userRepository.findById(request.user_id());
 
         if (user.isEmpty()) {
             throw new UserIdentificatorNotFoundException("Usuario no encontrado");
         }
 
-        String invitationCode = generateInvitationCode();
+        Group group = null;
 
-        Group group = Group.builder()
-                .name(request.name())
-                .invitationCode(invitationCode)
-                .build();
+        if (isPublic) {
+            group = Group.builder()
+                    .name(request.name())
+                    .budget(request.budget())
+                    .invitationCode(generateInvitationCode())
+                    .isPublic(isPublic)
+                    .build();
+        } else {
+            group = Group.builder()
+                    .name(request.name())
+                    .isPublic(isPublic)
+                    .build();
+        }
 
         group = groupRepository.save(group);
 
@@ -91,9 +100,9 @@ public class GroupServiceImpl implements IGroupService {
     private String generateInvitationCode() {
         java.security.SecureRandom random = new java.security.SecureRandom();
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder code = new StringBuilder(8);
+        StringBuilder code = new StringBuilder(6); // 6 caracteres para el código de invitación
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 6; i++) {
             code.append(chars.charAt(random.nextInt(chars.length())));
         }
 
