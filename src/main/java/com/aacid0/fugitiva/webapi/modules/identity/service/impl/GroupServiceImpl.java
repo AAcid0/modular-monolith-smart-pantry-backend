@@ -90,6 +90,7 @@ public class GroupServiceImpl implements IGroupService {
                             group.getId(),
                             group.getName(),
                             group.getInvitationCode(),
+                            group.getBudget(),
                             membersDto);
                 })
                 .toList();
