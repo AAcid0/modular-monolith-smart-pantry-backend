@@ -15,6 +15,7 @@ import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateGroupRequest;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateGroupResponse;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.GetGroupsByUserIdResponse;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.JoinGroupRequest;
+import com.aacid0.fugitiva.webapi.modules.identity.api.dto.JoinGroupResponse;
 import com.aacid0.fugitiva.webapi.modules.identity.service.IGroupService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,9 +43,8 @@ public class GroupController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity<Void> joinGroup(@RequestBody JoinGroupRequest request) {
+    public ResponseEntity<JoinGroupResponse> joinGroup(@RequestBody JoinGroupRequest request) {
         log.info("DTO Join Group recibido: {}", request);
-        groupService.joinGroup(request.user_id(), request.invitation_code());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(groupService.joinGroup(request.user_id(), request.invitation_code()));
     }
 }

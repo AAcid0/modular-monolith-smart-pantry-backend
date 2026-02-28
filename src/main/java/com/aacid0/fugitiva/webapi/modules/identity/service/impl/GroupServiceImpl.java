@@ -7,6 +7,7 @@ import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateGroupRequest;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.CreateGroupResponse;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.GetAllGroupsByUserIdResponseBody;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.GetGroupsByUserIdResponse;
+import com.aacid0.fugitiva.webapi.modules.identity.api.dto.JoinGroupResponse;
 import com.aacid0.fugitiva.webapi.modules.identity.api.dto.UserSummaryResponse;
 import com.aacid0.fugitiva.webapi.modules.identity.domain.models.Group;
 import com.aacid0.fugitiva.webapi.modules.identity.domain.models.User;
@@ -91,6 +92,7 @@ public class GroupServiceImpl implements IGroupService {
                             group.getName(),
                             group.getInvitationCode(),
                             group.getBudget(),
+                            group.isPublic(),
                             membersDto);
                 })
                 .toList();
@@ -112,7 +114,7 @@ public class GroupServiceImpl implements IGroupService {
 
     @Override
     @Transactional
-    public void joinGroup(UUID userId, String invitationCode) {
+    public JoinGroupResponse joinGroup(UUID userId, String invitationCode) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserIdentificatorNotFoundException("Usuario no encontrado"));
 
@@ -126,6 +128,8 @@ public class GroupServiceImpl implements IGroupService {
 
         user.getGroups().add(group);
         userRepository.save(user);
+
+        return new JoinGroupResponse(group.getName());
     }
 
 }
